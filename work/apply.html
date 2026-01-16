@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply to Technology Change Institute</title>
+<style>
+/* ==== KEEP YOUR CSS INTACT ==== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+.application-form {
+    background: white;
+    padding: 35px 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 500px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.application-form h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 28px;
+    position: relative;
+    padding-bottom: 15px;
+}
+.application-form h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    border-radius: 2px;
+}
+label { display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 15px; }
+input, select { width: 100%; padding: 14px 16px; margin-bottom: 20px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; transition: all 0.3s ease; background: #f8f9fa; }
+input:focus, select:focus { border-color: #6a11cb; box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1); outline: none; background: white; }
+input:hover, select:hover { border-color: #2575fc; }
+.gender-options { display: flex; gap: 25px; margin-bottom: 20px; padding: 10px 0; }
+.gender-options label { display: flex; align-items: center; font-weight: normal; cursor: pointer; padding: 8px 15px; border-radius: 8px; transition: all 0.3s ease; }
+.gender-options label:hover { background: #f0f5ff; }
+.gender-options input[type="radio"] { width: auto; margin-right: 8px; margin-bottom: 0; transform: scale(1.2); accent-color: #2575fc; }
+button { width: 100%; padding: 18px; border: none; border-radius: 12px; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; position: relative; overflow: hidden; }
+button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37, 117, 252, 0.3); background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%); }
+button:active { transform: translateY(0); }
+.success-message { display: none; background: linear-gradient(135deg, #d4edda, #c3e6cb); color: #155724; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; font-weight: bold; border-left: 5px solid #28a745; animation: slideIn 0.5s ease-out; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+.success-message i { font-size: 24px; margin-bottom: 10px; display: block; }
+.form-group { margin-bottom: 25px; }
+.form-group:last-child { margin-bottom: 0; }
+.required::after { content: " *"; color: #e74c3c; }
+.phone-hint { font-size: 13px; color: #7f8c8d; margin-top: -10px; margin-bottom: 15px; }
+.program-hint { font-size: 13px; color: #7f8c8d; font-style: italic; margin-top: -15px; margin-bottom: 15px; }
+.loading { display: none; text-align: center; padding: 20px; }
+.loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #2575fc; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.form-footer { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #eee; color: #7f8c8d; font-size: 14px; }
+.whatsapp-icon { display: inline-block; background: #25D366; color: white; width: 24px; height: 24px; border-radius: 50%; text-align: center; line-height: 24px; margin-right: 8px; font-weight: bold; }
+@media (max-width: 600px) { .application-form { padding: 25px 20px; border-radius: 15px; } .gender-options { flex-direction: column; gap: 10px; } button { padding: 16px; } }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="application-form">
+
+    <h2><a href="index.html" style="margin-left: 114px;  ">Home</a><br><br></h2>
+    <h2><i class="fas fa-graduation-cap" style="color: #2575fc; margin-right: 10px;"></i>Technology Change Institute</h2>
+    
+    <div id="successMessage" class="success-message">
+        <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px;"></i>
+        <h3>Application Submitted Successfully!</h3>
+        <p>Your application has been received.</p>
+        <p><strong>Your Kodi:</strong> <span id="displayKodi"></span></p>
+        <p>Please check your email for confirmation.</p>
+        <button onclick="showFormAgain()" style="background: #28a745; margin-top: 15px; width: auto; padding: 10px 30px;">
+            <i class="fas fa-plus"></i> Apply Again
+        </button>
+    </div>
+    
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <p>Submitting your application...</p>
+        <p><small>Please wait while we process your information</small></p>
+    </div>
+    
+    <!-- ====== FORM ==== -->
+    <form id="applyForm"
+          name="application"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="application">
+        <input type="hidden" name="bot-field">
+        <input type="hidden" name="kodi" id="kodi" value="">
+
+        <!-- Keep all other inputs like before with name attributes -->
+        <div class="form-group">
+            <label for="fname" class="required">First Name</label>
+            <input type="text" id="fname" name="first_name" required placeholder="Enter your first name">
+        </div>
+        <div class="form-group">
+            <label for="lname" class="required">Last Name</label>
+            <input type="text" id="lname" name="last_name" required placeholder="Enter your last name">
+        </div>
+        <div class="form-group">
+            <label for="email" class="required">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+            <label for="phone" class="required">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required placeholder="07XXXXXXXX" pattern="[0-9]{10}">
+        </div>
+        <div class="form-group">
+            <label class="required">Gender</label>
+            <div class="gender-options">
+                <label><input type="radio" name="gender" value="Male" required> Male</label>
+                <label><input type="radio" name="gender" value="Female"> Female</label>
+                <label><input type="radio" name="gender" value="Other"> Other</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="level" class="required">Level of Study</label>
+            <select id="level" name="level" required>
+                <option value="">-- Select Level --</option>
+                <option>Certificate</option>
+                <option>Diploma</option>
+                <option>Bachelor Degree</option>
+                <option>Master Degree</option>
+                <option>Short Course</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="program1" class="required">First Choice Program</label>
+            <select id="program1" name="program1" required>
+                <option value="">-- Select Program --</option>
+                <option>Information Technology</option>
+                <option>Computer Science</option>
+                <option>Data Science</option>
+                <option>Software Engineering</option>
+                <option>Cybersecurity</option>
+                <option>Network Administration</option>
+                <option>Web Development</option>
+                <option>Mobile App Development</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="program2">Second Choice Program (Optional)</label>
+            <select id="program2" name="program2">
+                <option value="">-- Optional --</option>
+                <option>Information Technology</option>
+                <option>Computer Science</option>
+                <option>Data Science</option>
+                <option>Software Engineering</option>
+                <option>Cybersecurity</option>
+                <option>Network Administration</option>
+                <option>Web Development</option>
+                <option>Mobile App Development</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="program3">Third Choice Program (Optional)</label>
+            <select id="program3" name="program3">
+                <option value="">-- Optional --</option>
+                <option>Information Technology</option>
+                <option>Computer Science</option>
+                <option>Data Science</option>
+                <option>Software Engineering</option>
+                <option>Cybersecurity</option>
+                <option>Network Administration</option>
+                <option>Web Development</option>
+                <option>Mobile App Development</option>
+            </select>
+        </div>
+
+        <button type="submit" id="submitBtn">
+            <i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Submit Application
+        </button>
+    </form>
+</div>
+
+<script>
+const form = document.getElementById("applyForm");
+const successMessage = document.getElementById("successMessage");
+const loading = document.getElementById("loading");
+const displayKodi = document.getElementById("displayKodi");
+
+// Generate initial Kodi
+function generateKodi(){
+    return "KCI-" + Math.floor(Math.random()*1000000);
+}
+document.getElementById("kodi").value = generateKodi();
+
+// Show form again
+function showFormAgain(){
+    successMessage.style.display = "none";
+    form.style.display = "block";
+}
+
+// Submit handler
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    form.style.display = "none";
+    loading.style.display = "block";
+
+    setTimeout(function(){
+        loading.style.display = "none";
+        successMessage.style.display = "block";
+
+        // Show Kodi to user
+        displayKodi.textContent = document.getElementById("kodi").value;
+
+        // Reset form and generate new Kodi
+        form.reset();
+        document.getElementById("kodi").value = generateKodi();
+
+    }, 2000);
+});
+</script>
+
+</body>
+</html>
+  
+  
+  
+
+
+
+
+
+
+
+

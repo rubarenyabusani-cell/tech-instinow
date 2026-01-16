@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Technology Change institute</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: poppies, sans-serif; }
+    body { background: linear-gradient(to top, #081b29, #ddd); color:#222; }
+
+    /* Header (reorganized) */
+    header.site-header { background: #081b29; color: #fff; padding:18px 22px; display:flex; align-items:center; gap:18px; justify-content:space-between; position:sticky; top:0; z-index:10; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand img { width:72px; height:72px; border-radius:12px; object-fit:cover; }
+    .brand h1 { font-size:20px; margin:0; letter-spacing:0.4px; }
+    nav.main-nav { display:flex; gap:10px; align-items:center; }
+    nav.main-nav a { color:#fff; text-decoration:none; padding:8px 12px; border-radius:6px; font-weight:600; }
+    nav.main-nav a:hover { background:#2a313a; color:#fff; }
+
+    /* Dropdown styles */
+    .dropdown { float: left; overflow: hidden; margin-top: 0; }
+    .dropdown .dropbtn { font-size: 16px; border: none; outline: none; color: white; padding: 14px 20px; background-color: inherit; font-family: inherit; margin: 0; cursor:pointer; }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; }
+    .dropdown-content a { float: none; color: black; padding: 12px 16px; text-decoration: none; display: block; text-align: left; }
+    .dropdown-content a:hover { background-color: #ddd; }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    .header-right { display:flex; gap:12px; align-items:center; }
+    .apply-link { color:#fff; text-decoration:none; padding:8px 12px; border-radius:6px; font-weight:600; background:#2a313a; transition:background 0.3s; }
+    .apply-link:hover { background:#fff; color:#081b29; }
+    .search-bar { display:flex; align-items:center; }
+    .search-bar input { padding:6px 8px; border-radius:4px 0 0 4px; border:1px solid #444; outline:none; }
+    .search-bar button { padding:6px 10px; border-radius:0 4px 4px 0; border:1px solid #444; background:#333; color:#fff; cursor:pointer; }
+
+    #hamburger { font-size:26px; background:#575757; padding:8px 10px; border-radius:8px; cursor:pointer; color:#fff; display:none; }
+    /* three-dot hamburger and mobile nav drawer */
+    /* hamburger button (three horizontal bars) */
+    #hamburger { width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:transparent; border:none; color:#fff; cursor:pointer; }
+    #hamburger .bars { display:flex; flex-direction:column; gap:5px; align-items:center; }
+    #hamburger .bar { width:20px; height:2px; background:#fff; border-radius:2px; display:block; }
+    .mobile-nav { position:fixed; left:0; top:0; bottom:0; width:260px; max-width:86%; background:#081b29; transform:translateX(-110%); transition:transform .28s ease; z-index:55; padding-top:80px; }
+    .mobile-nav a { display:block; color:#fff; padding:12px 18px; text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.03); }
+    .mobile-nav a:hover { background:rgba(255,255,255,0.03); }
+    .mobile-nav .close-btn { position:absolute; top:12px; right:12px; background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer; }
+    .mobile-nav .submenu-toggle { background:none; border:none; color:#fff; padding:12px 18px; text-align:left; width:100%; cursor:pointer; font-size:16px; }
+    .mobile-nav .submenu { display:none; background:rgba(255,255,255,0.05); }
+    .mobile-nav .submenu a { padding-left:36px; font-size:14px; }
+    .mobile-nav-open .mobile-nav { transform:translateX(0); }
+    /* shift logo right when mobile nav opens */
+    .mobile-nav-open .brand { transform:translateX(70px); transition:transform .28s ease; }
+
+    /* Info sections */
+    .info-sections { display:flex; gap:20px; justify-content:center; padding:30px 12px; flex-wrap:wrap; }
+    .info-card { background:linear-gradient(135deg, #e3f2fd, #bbdefb); padding:20px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.08); max-width:350px; text-align:center; transition:background 0.3s; }
+    .info-card:hover { background:linear-gradient(135deg, #bbdefb, #90caf9); }
+    .info-card h3 { color:#0d47a1; margin-bottom:10px; }
+    .info-card p { color:#424242; line-height:1.6; margin-bottom:15px; }
+    .info-card .apply-link { display:inline-block; margin-top:10px; }
+    .program-card { background:#fff; padding:20px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.08); max-width:300px; text-align:center; }
+    .program-card h3 { color:#081b29; margin-bottom:10px; }
+    .program-card p { color:#555; line-height:1.6; margin-bottom:15px; }
+    .program-card a { color:#007bff; text-decoration:none; font-weight:600; }
+    .program-card a:hover { text-decoration:underline; }
+    .team-section { display:flex; justify-content:center; gap:30px; padding:30px 12px; flex-wrap:wrap; }
+    .team-member { text-align:center; max-width:300px; background:#fff; padding:14px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.08); }
+    .team-image { width:250px; height:250px; border-radius:8px; object-fit:cover; margin:0 auto 10px; }
+
+    /* Manager Carousel (unchanged logic) */
+    .manager-carousel { width:800px; max-width:95%; height:360px; margin:20px auto; position:relative; overflow:hidden; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.3); background:#000; }
+    .carousel-slide { position:absolute; inset:0; opacity:0; transition:opacity 1s ease; display:flex; align-items:center; justify-content:center; }
+    .carousel-slide img { width:100%; height:100%; object-fit:cover; transform:scale(1); transition:transform 6s ease; display:block; }
+    .carousel-slide.active { opacity:1; z-index:2; }
+    .carousel-slide.active img { transform:scale(1.08); }
+    .carousel-overlay { position:absolute; top:18px; left:24px; color:#fff; z-index:3; text-shadow:0 3px 10px rgba(0,0,0,0.6); }
+    .carousel-overlay h2 { font-size:28px; margin-bottom:6px; }
+    .carousel-overlay p { font-size:14px; opacity:0.95; }
+    .carousel-dots { position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:4; }
+    .carousel-dots button { width:10px; height:10px; border-radius:50%; border:none; background:rgba(255,255,255,0.5); cursor:pointer; padding:0; }
+    .carousel-dots button.active { background:#fff; box-shadow:0 0 6px rgba(0,0,0,0.4); }
+
+    /* Footer - expanded, organized columns */
+    footer.site-footer { background:#0f1720; color:#fff; padding:36px 22px; margin-top:40px; display:flex; gap:32px; justify-content:center; flex-wrap:wrap; }
+    .footer-col { min-width:200px; max-width:320px; }
+    .footer-brand { display:flex; gap:12px; align-items:center; }
+    .footer-brand img { width:64px; height:64px; border-radius:8px; object-fit:cover; }
+    .footer-title { font-size:18px; margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:4px; }
+    .footer-desc { font-size:14px; color:rgba(255,255,255,0.86); line-height:1.5; }
+
+    .footer-links { display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+    .footer-links a { color:#dbe4ee; text-decoration:none; font-size:14px; }
+    .footer-links a:hover { color:#fff; text-decoration:underline; }
+
+    .social-row { display:flex; gap:10px; margin-top:12px; }
+    .social-row a { display:inline-flex; width:44px; height:44px; background:#fff; color:#081b29; border-radius:8px; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,0.12); }
+    .social-row img { width:20px; height:20px; }
+
+    .contact-item { font-size:14px; color:#dbe4ee; margin-top:6px; display:flex; gap:8px; align-items:center; }
+
+    .footer-bottom { width:100%; text-align:center; margin-top:18px; font-size:13px; color:rgba(255,255,255,0.7); display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .footer-divider { width:60%; max-width:420px; height:1px; background:rgba(255,255,255,0.12); border-radius:1px; }
+
+    @media (max-width:880px){
+      nav.main-nav { display:none; }
+      #hamburger { display:block; }
+      .team-section{ flex-direction:column; align-items:center; }
+      footer.site-footer { padding:26px 14px; }
+    }
+    /* Sidebar & WhatsApp floating button */
+    .side-panel { position:fixed; right:-340px; top:0; width:320px; max-width:92%; height:100%; background:#081b29; color:#fff; z-index:60; padding:18px; transition:right .28s ease; box-shadow:-6px 0 24px rgba(0,0,0,0.3); }
+    .side-open .side-panel { right:0; }
+    .side-panel .close { position:absolute; left:12px; top:12px; background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer; }
+    .side-panel h3 { margin-top:28px; margin-bottom:8px; }
+    .contact-form input, .contact-form textarea { width:100%; padding:8px; margin-top:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.03); color:#fff; }
+    .contact-form button { background:#0b8451; color:#fff; border:none; padding:10px 12px; border-radius:6px; margin-top:8px; cursor:pointer; }
+    .side-toggle-btn { position:fixed; right:14px; bottom:120px; width:56px; height:56px; border-radius:12px; background:#25D366; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(0,0,0,0.2); z-index:70; cursor:pointer; color:#fff; font-size:20px; }
+    .whatsapp-btn { position:fixed; right:14px; bottom:50px; width:56px; height:56px; border-radius:50%; background:#25D366; display:flex; align-items:center; justify-content:center; z-index:70; color:#fff; font-size:22px; box-shadow:0 8px 20px rgba(0,0,0,0.2); text-decoration:none; }
+    @media (min-width:881px){ .side-toggle-btn{ display:none;} }
+  </style>
+</head>
+<body>
+  <!-- Header (reorganized as requested) -->
+  <header class="site-header">
+    <button id="hamburger" aria-label="Open menu" onclick="document.body.classList.toggle('mobile-nav-open')">
+      <span class="bars"><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>
+    </button>
+    <div class="brand">
+      <img src="logo1.jpg" alt="Kamcollege logo" />
+      <div>
+        <h1>Technology Change Institute</h1>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main navigation">
+    </nav>
+
+    <div class="header-right">
+      <a href="apply.html" class="apply-link">Apply Now</a>
+    </div>
+  </header>
+
+  <!-- Mobile nav drawer (links moved here for small screens) -->
+  <nav class="mobile-nav" aria-label="Mobile navigation" id="mobileNav">
+    <button class="close-btn" onclick="document.body.classList.remove('mobile-nav-open')">✕</button>
+    <a href="#home" onclick="document.body.classList.remove('mobile-nav-open')">Home</a>
+    <a href="#about" onclick="document.body.classList.remove('mobile-nav-open')">About</a>
+    <button class="submenu-toggle" onclick="toggleSubmenu('programsSub')">Programs ▼</button>
+    <div class="submenu" id="programsSub">
+      <a href="programs/certificate-ict.html" onclick="document.body.classList.remove('mobile-nav-open')">Certificate in ICT</a>
+      <a href="programs/diploma-ict.html" onclick="document.body.classList.remove('mobile-nav-open')">Diploma in ICT</a>
+      <a href="programs/bachelor-ict.html" onclick="document.body.classList.remove('mobile-nav-open')">Bachelor in ICT</a>
+    </div>
+    <button class="submenu-toggle" onclick="toggleSubmenu('eventsSub')">Events ▼</button>
+    <div class="submenu" id="eventsSub">
+      <a href="open-day.html" onclick="document.body.classList.remove('mobile-nav-open')">Open day in college</a>
+      <a href="orientation.html" onclick="document.body.classList.remove('mobile-nav-open')">College orientation for student</a>
+      <a href="qna.html" onclick="document.body.classList.remove('mobile-nav-open')">Questions and answers production</a>
+      <a href="workshops.html" onclick="document.body.classList.remove('mobile-nav-open')">Tech Workshops</a>
+    </div>
+    <button class="submenu-toggle" onclick="toggleSubmenu('contactsSub')">Contacts Us ▼</button>
+    <div class="submenu" id="contactsSub">
+      <a href="mailto:magomarubare@gmail.com" onclick="document.body.classList.remove('mobile-nav-open')">Email</a>
+      <a href="#address" onclick="document.body.classList.remove('mobile-nav-open')">P.O.Box 2345 DSM</a>
+      <a href="tel:0744257317" onclick="document.body.classList.remove('mobile-nav-open')">Phone</a>
+      <a href="contact.html" onclick="document.body.classList.remove('mobile-nav-open')">Contact Form</a>
+    </div>
+  </nav>
+
+  <!-- Side panel and buttons -->
+  <div class="side-panel" id="sidePanel" aria-hidden="true">
+    <button class="close" id="sideClose">✕</button>
+    <h3>Contact Kamcollege</h3>
+    <p style="color:rgba(255,255,255,0.85);font-size:14px;">Send a quick message via email or WhatsApp.</p>
+    <form class="contact-form" id="sideContactForm" onsubmit="return false;">
+      <label style="font-size:13px;color:rgba(255,255,255,0.9);">Name</label>
+      <input type="text" id="cf-name" placeholder="Your name" />
+      <label style="font-size:13px;color:rgba(255,255,255,0.9);">Email</label>
+      <input type="email" id="cf-email" placeholder="you@example.com" />
+      <label style="font-size:13px;color:rgba(255,255,255,0.9);">Message</label>
+      <textarea id="cf-message" rows="5" placeholder="Write your message..."></textarea>
+      <button id="sendEmail">Send Email</button>
+      <button id="sendWhatsApp" style="background:#128C7E;margin-left:8px;">Send WhatsApp</button>
+    </form>
+    <div style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.9);">
+      <div><strong>Email:</strong> <a href="mailto:magomarubare@gmail.com" style="color:#dbe4ee;">magomarubare@gmail.com</a></div>
+      <div style="margin-top:6px;"><strong>WhatsApp:</strong> <a id="waFooterLink" href="https://wa.me/255744257317" style="color:#dbe4ee;">+255 744 257 317</a></div>
+    </div>
+  </div>
+
+  <button class="side-toggle-btn" id="openSide" aria-label="Open contact panel">✉️</button>
+  <a class="whatsapp-btn" id="floatWhatsapp" href="https://wa.me/255744257317" target="_blank" rel="noopener" aria-label="Open WhatsApp">📱</a>
+
+  <!-- Manager Carousel -->
+  <div class="manager-carousel" id="managerCarousel" aria-label="Manager slideshow">
+    <div class="carousel-slide active"><img src="c-lab.jpg" alt="Director slide" /></div>
+    <div class="carousel-slide"><img src="musika 1.jpg" alt="Manager slide 1" /></div>
+    <div class="carousel-slide"><img src="c-lab2.jpg" alt="Manager slide 2" /></div>
+
+    <div class="carousel-overlay">
+      <h2> technologies change institute</h2>
+      <p> Technology Change— Innovation & Opportunity</p>
+    </div>
+
+    <div class="carousel-dots" id="carouselDots">
+      <button class="active" aria-label="Slide 1"></button>
+      <button aria-label="Slide 2"></button>
+      <button aria-label="Slide 3"></button>
+    </div>
+  </div>
+
+  <!-- Three info sections -->
+  <section class="info-sections">
+    <div class="info-card">
+      <h3>Technology Programs</h3>
+      <p>Explore our cutting-edge technology programs designed to equip you with the skills needed in today's digital world. From software development to data science, we offer comprehensive training.</p>
+    </div>
+    <div class="info-card">
+      <h3>Modern Learning Facilities</h3>
+      <p>Experience learning in our state-of-the-art facilities equipped with the latest technology. Our modern classrooms, labs, and online platforms ensure an engaging and effective learning environment.</p>
+    </div>
+    <div class="info-card">
+      <h3>New and Events</h3>
+      <p>Stay updated with our latest news and upcoming events. Join workshops, seminars, and community outreach programs.</p>
+      <a href="apply.html" class="apply-link">Apply Now</a>
+    </div>
+  </section>
+
+  <!-- Programs (quick anchors) -->
+  <section id="programs" style="max-width:1100px;margin:18px auto;padding:18px;">
+    <h2 style="margin-bottom:8px;color:white;font-size:28px;text-align:center;text-shadow:0 2px 4px rgba(0,0,0,0.1);">Our Programs</h2>
+    <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
+      <div class="program-card">
+        <h3>Information Technology</h3>
+        <p>Comprehensive training in IT fundamentals, networking, and software applications.</p>
+        <a href="programs/information-technology.html">Learn More</a>
+      </div>
+      <div class="program-card">
+        <h3>Computer Science</h3>
+        <p>Deep dive into algorithms, programming languages, and computer systems.</p>
+        <a href="programs/computer-science.html">Learn More</a>
+      </div>
+      <div class="program-card">
+        <h3>Data Science</h3>
+        <p>Learn data analysis, machine learning, and big data technologies.</p>
+        <a href="programs/data-science.html">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section id="team" class="team-section" aria-label="Leadership team">
+    <div class="team-member">
+      <img src="logo 2.jpg" alt="Director" class="team-image" />
+      <h3>Director</h3>
+      <p>Mr. John Doe — Director, with over 20 years in education management.</p>
+    </div>
+    <div class="team-member">
+      <img src="musika 1.jpg" alt="Manager" class="team-image" />
+      <h3>Manager</h3>
+      <p>Ms. Jane Smith — Manager, ensuring smooth operations & student satisfaction.</p>
+    </div>
+    <div class="team-member">
+      <img src="musika 1.jpg" alt="Manager" class="team-image" />
+      <h3>Manager</h3>
+      <p>Ms. Jane Smith — Manager, ensuring smooth operations & student satisfaction.</p>
+    </div>
+  </section>
+
+  <!-- Main content placeholders -->
+  <main style="max-width:1100px;margin:6px auto;padding:18px;">
+    <section id="about">
+      <h2 style="color: white;">About Technoogy change institute</h2>
+      <p style="color: white;">Welcome to Technoogy change institute, with Science. We provide accessible, affordable, and innovative health education for community empowerment.</p>
+    </section>
+  </main>
+
+  <!-- Footer (enlarged with social, quick links, programs, and working contacts) -->
+  <footer class="site-footer" id="contact">
+    <div class="footer-col">
+      <div class="footer-brand">
+        <img src="logo1.jpg" alt="Kamcollege logo" />
+        <div>
+          <div class="footer-title">Technology change institution</div>
+          <div class="footer-desc">Registered REG/NACVET/1188P — Training for brighter health careers.</div>
+        </div>
+      </div>
+
+      <div class="social-row" aria-label="Social links">
+        <a href="https://www.facebook.com" target="_blank" rel="noopener">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" />
+        </a>
+        <a href="https://www.instagram.com" target="_blank" rel="noopener">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" />
+        </a>
+        <a href="https://www.youtube.com" target="_blank" rel="noopener">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube" style="width:20px;height:20px;" />
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-title">Quick Links</div>
+      <div class="footer-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#programs">Programs</a>
+        <a href="apply.html">Apply Now</a>
+        <a href="galley.html">Gallery</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-title">Our Programs</div>
+      <div class="footer-links">
+        <a href="programs/ict.html">Certificate in ICT</a>
+        <a href="programs/computer-science.html">Bachelor in Computer Science</a>
+        <a href="programs/data-science.html">Diploma in Data Science</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-title">Contact Us</div>
+      <div class="contact-item"><strong>Email:</strong> <a href="mailto:magomarubare@gmail.com" style="color:#dbe4ee;">magomarubare@gmail.com</a></div>
+      <div class="contact-item"><strong>Phone:</strong> <a href="tel:+255744257317" style="color:#dbe4ee;">+255 744 257 317</a></div>
+        <div class="contact-item"><strong>WhatsApp:</strong> <a href="https://wa.me/255744257317?text=Hello%20Kamcollege" target="_blank" style="color:#dbe4ee;">Chat on WhatsApp</a></div>
+      <div class="contact-item"><strong>Address:</strong> P.O.Box 2345, DSM</div>
+      <div class="contact-item" style="margin-top:10px;"><a href="contact.html" style="color:#dbe4ee;">Contact page / Inquiry form</a></div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>All rights reserved © Kamcollege</div>
+      <div class="footer-divider" aria-hidden="true"></div>
+      <div>Organized and developed by IT department</div>
+    </div>
+  </footer>
+
+  <script>
+    // Carousel JS (kept from previous)
+    (function(){
+      const slides = document.querySelectorAll('.carousel-slide');
+      const dots = document.querySelectorAll('#carouselDots button');
+      let current = 0;
+      const intervalMs = 4500;
+
+      function showSlide(index){
+        slides.forEach((s,i)=> s.classList.toggle('active', i === index));
+        dots.forEach((d,i)=> d.classList.toggle('active', i === index));
+        current = index;
+      }
+
+      let timer = setInterval(()=> {
+        const next = (current + 1) % slides.length;
+        showSlide(next);
+      }, intervalMs);
+
+      dots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => {
+          clearInterval(timer);
+          showSlide(idx);
+          timer = setInterval(()=> {
+            const next = (current + 1) % slides.length;
+            showSlide(next);
+          }, intervalMs);
+        });
+      });
+
+      const carousel = document.getElementById('managerCarousel');
+      carousel.addEventListener('mouseenter', () => clearInterval(timer));
+      carousel.addEventListener('mouseleave', () => {
+        clearInterval(timer);
+        timer = setInterval(()=> {
+          const next = (current + 1) % slides.length;
+          showSlide(next);
+        }, intervalMs);
+      });
+    })();
+
+    // Mobile nav close on outside click
+    (function(){
+      const mobileNav = document.getElementById('mobileNav');
+      document.addEventListener('click', (e) => {
+        if (!mobileNav.contains(e.target) && !document.getElementById('hamburger').contains(e.target) && document.body.classList.contains('mobile-nav-open')) {
+          document.body.classList.remove('mobile-nav-open');
+        }
+      });
+      // Toggle submenu
+      window.toggleSubmenu = function(id) {
+        const sub = document.getElementById(id);
+        sub.style.display = sub.style.display === 'block' ? 'none' : 'block';
+      };
+    })();
+
+    // Sidebar & contact form JS
+    (function(){
+      const openBtn = document.getElementById('openSide');
+      const closeBtn = document.getElementById('sideClose');
+      const body = document.body;
+      const sendEmail = document.getElementById('sendEmail');
+      const sendWhatsApp = document.getElementById('sendWhatsApp');
+
+      function openSide(){ body.classList.add('side-open'); document.getElementById('sidePanel').setAttribute('aria-hidden','false'); }
+      function closeSide(){ body.classList.remove('side-open'); document.getElementById('sidePanel').setAttribute('aria-hidden','true'); }
+
+      openBtn.addEventListener('click', openSide);
+      closeBtn.addEventListener('click', closeSide);
+
+      // Build mailto link from form values
+      sendEmail.addEventListener('click', ()=>{
+        const name = encodeURIComponent(document.getElementById('cf-name').value || '');
+        const email = encodeURIComponent(document.getElementById('cf-email').value || '');
+        const msg = encodeURIComponent(document.getElementById('cf-message').value || '');
+        const subject = encodeURIComponent('Website inquiry from ' + (name || email || 'visitor'));
+        const bodyText = encodeURIComponent('Name: ' + (name ? decodeURIComponent(name) : '') + '\nEmail: ' + (email ? decodeURIComponent(email) : '') + '\n\n' + (msg ? decodeURIComponent(msg) : ''));
+        const mailto = `mailto:magomarubare@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+        window.location.href = mailto;
+      });
+
+      // Send message to WhatsApp using wa.me link
+      sendWhatsApp.addEventListener('click', ()=>{
+        const name = document.getElementById('cf-name').value || '';
+        const email = document.getElementById('cf-email').value || '';
+        const msg = document.getElementById('cf-message').value || '';
+        let text = `Hello, I am ${name}.\nEmail: ${email}.\nMessage: ${msg}`;
+        text = encodeURIComponent(text);
+        const waLink = `https://wa.me/255744257317?text=${text}`;
+        window.open(waLink, '_blank');
+      });
+
+      // close side panel on ESC
+      document.addEventListener('keyup', (e)=>{ if(e.key === 'Escape') closeSide(); });
+    })();
+  </script>
+</body>
+</html>
